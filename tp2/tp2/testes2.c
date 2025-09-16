@@ -6,7 +6,7 @@
 #include <stdio.h>
 #include <stdlib.h>
 #include "racional.h"
-
+#define MAX 100
 /* estrutura que representa um número racional */
 struct racional {
   long num;          /* numerador   */
@@ -98,9 +98,8 @@ struct racional cria_r (long numerador, long denominador)
 {
 	struct racional r;
 	
-	r.num = numerador;
-	r.den = denominador;
-	
+	scanf("%ld", &r.num);
+	scanf("%ld", &r.den);
 	return r;
 }
 
@@ -184,8 +183,9 @@ int soma_r (struct racional r1, struct racional r2, struct racional *r3)
 	if ( ((! valido_r(r1)) || (! valido_r(r2))) || (r3 == NULL))
 		return 0;
 		
-	 r3 -> num = ((r1.num * r2.den) + (r1.den * r2.num)) / mdc(r1.den, r2.den);   
-	 r3 -> den = mmc(r1.den, r2.den);
+	r3 -> num = ((r1.num * r2.den) + (r1.den * r2.num)) / mdc(r1.den, r2.den);   
+	r3 -> den = mmc(r1.den, r2.den);
+	*r3 = simplifica_r(*r3);
 	
 	return 1;
 }	
@@ -196,11 +196,76 @@ int subtrai_r (struct racional r1, struct racional r2, struct racional *r3)
 	if ( ((! valido_r(r1)) || (! valido_r(r2))) || (r3 == NULL))
 		return 0;
 		
-	 r3 -> num = ((r1.num * r2.den) - (r1.den * r2.num)) / mdc(r1.den, r2.den);   
-	 r3 -> den = mmc(r1.den, r2.den);
+	r3 -> num = ((r1.num * r2.den) - (r1.den * r2.num)) / mdc(r1.den, r2.den);   
+	r3 -> den = mmc(r1.den, r2.den);
+	*r3 = simplifica_r(*r3);
+	 
+	return 1;
+}
+
+
+int multiplica_r (struct racional r1, struct racional r2, struct racional *r3)
+{
+	if ( ((! valido_r(r1)) || (! valido_r(r2))) || (r3 == NULL))
+		return 0;
+	r3 -> num = r1.num * r2.num;   
+	r3 -> den = r1.den * r2.den;
+	*r3 = simplifica_r(*r3);
+	 
+	return 1;
+}
+
+
+int divide_r (struct racional r1, struct racional r2, struct racional *r3)
+{
+	long aux;
+	if ( ((! valido_r(r1)) || (! valido_r(r2))) || (r3 == NULL))
+		return 0;
+		
+	aux = r2.den;
+	r2.den = r2.num;
+	r2.num = aux;
+	
+	multiplica_r(r1, r2, r3);
+	*r3 = simplifica_r(*r3);
+	
+	if (r3->den == 0)
+		return 0;
 	
 	return 1;
 }
+
+
+//*******************************************************************************
+//funcoes para o vetor
+
+/*void inicializa_vetor(struct racional *v)
+{
+	int i;	
+	for (i=0; i <= MAX; i++)
+		v[i].num = 0;
+}
+
+
+void imprime_feio (struct racional *v)
+{
+	int i;
+	for (i=0; i <= MAX; i++)
+		printf("%ld ", v[i].num);
+}
+*/	
+
+void le_vetor (struct racional v[], int n)
+{
+	long i, a = 0, b = 0;
+	for (i=1; i <= n; i++)
+	{
+		cria_r(a, b);
+	}	
+}
+
+
+
 
 
 
@@ -208,19 +273,13 @@ int subtrai_r (struct racional r1, struct racional r2, struct racional *r3)
 
 int main ()
 {
-	long a = 0, b = 4, c = 7, d = 8;
-	struct racional r1, r2, r3;
-	struct racional *ptr_r3;
-	ptr_r3 = &r3;
-	srand(0);
-	r1 = sorteia_r(a, b);
-	r2 = sorteia_r(c, d);
-	imprime_r(r1);
-	printf("\n");
-	imprime_r(r2);
-	printf("\n%d\n", soma_r(r1, r2, ptr_r3));
-	imprime_r(r3);
-	printf("\n%d\n", subtrai_r(r1, r2, ptr_r3));
-	imprime_r(r3);
+	struct racional v[MAX];
+	int n;
+	
+	scanf("%d", &n);
+	le_vetor(v, n);
+	
+	
+	
 }
 
