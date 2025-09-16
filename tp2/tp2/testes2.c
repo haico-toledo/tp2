@@ -258,10 +258,16 @@ void imprime_feio (struct racional *v)
 void le_vetor (struct racional v[], int n)
 {
 	long i, a = 0, b = 0;
-	for (i=1; i <= n; i++)
-	{
+	for (i=0; i < n; i++)
 		cria_r(a, b);
-	}	
+}
+
+void imprime_vetor (struct racional v[], int n)
+{
+	for (i=0; i < n; i++)
+	{
+		
+	}
 }
 
 
