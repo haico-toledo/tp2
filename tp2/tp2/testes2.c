@@ -257,35 +257,105 @@ void imprime_feio (struct racional *v)
 
 void le_vetor (struct racional v[], int n)
 {
-	long i, a = 0, b = 0;
-	for (i=0; i < n; i++)
-		cria_r(a, b);
+	int i, a = 0, b = 0;
+	for (i=1; i <= n; i++)
+		v[i] = cria_r(a, b);
 }
 
+
+//imprime todos os elementos do vetor sem espaco no final!!!
 void imprime_vetor (struct racional v[], int n)
 {
-	for (i=0; i < n; i++)
-	{
+	int i;
+	
+	if (n <= 0)
+		return;
 		
+	printf("VETOR= ");
+	for (i=1; i <= (n-1); i++)
+	{
+		imprime_r(v[i]);
+		printf(" ");
+	}
+	imprime_r(v[i]);
+	printf("\n");
+}
+
+
+void elimina_nan (struct racional v[], int *n)
+{
+	int i = *n;
+	
+	while (i >= 1)
+	{
+		if (v[i].den == 0)
+		{
+			v[i] = v[*n];
+			*n = *n - 1;
+		}
+		i--;
+	}
+}	
+
+
+//select sort
+void ordena_vetor (struct racional v[], int n)
+{
+	struct racional aux;
+	int i, j, menor;
+	
+	for (i=1; i < n; i++)
+	{
+		//assume que a posicao inicial tem o menor valor
+		menor = i;
+		
+		for (j=(i+1); j < n; j++)
+		{
+			//se o elemento atual eh menor que o menor anterior, atualiza a variavel 
+			if (compara_r(v[menor], v[j]) == 1) 
+				menor = j;	
+		}
+		
+		//troca o elemento para o lugar correto
+		aux = v[i];
+		v[i] = v[menor];
+		v[menor] = aux;
+	}
+
+}
+
+
+void soma_vetor (struct racional v[], struct racional *soma, int n)
+{
+	int i;
+	soma -> den = 1;
+	for (i=1; i <= n; i++)
+	{
+		soma_r(v[i], *soma, soma);
 	}
 }
 
 
-
-
-
-
-
-
 int main ()
 {
-	struct racional v[MAX];
-	int n;
+	struct racional v[MAX], soma, *ptr_soma;
+	int n, *ptr_n = &n;
+	
+	ptr_soma = &soma;
 	
 	scanf("%d", &n);
+	
 	le_vetor(v, n);
+	imprime_vetor(v, n);
 	
+	elimina_nan(v, ptr_n);
+	imprime_vetor(v, n);
 	
+	ordena_vetor(v, n);
+	imprime_vetor(v , n);
+	
+	soma_vetor(v, ptr_soma, n);
+	imprime_r(soma);
 	
 }
 
